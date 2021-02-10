@@ -2,6 +2,7 @@
   "name": "rj-folder-renamer",
   "version": "1.0.0",
   "private": true,
+  "main": "./RJFolderRenamer.js",
   "dependencies": {
     "@types/jsdom": "^16.2.6",
     "@types/node": "^14.14.25",
@@ -10,8 +11,13 @@
     "node-fetch": "^2.6.1"
   },
   "scripts": {
+    "build": "nexe ./RJFolderRenamer.js -r ./node_modules/jsdom/lib/jsdom/living/xhr/xhr-sync-worker.js",
+    "prebuild": "tsc ./RJFolderRenamer.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "okathira",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nexe": "^4.0.0-beta.17"
+  }
 }

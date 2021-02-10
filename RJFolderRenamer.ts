@@ -1,6 +1,8 @@
 import * as fs from "fs";
+import * as path from "path";
 import fetch, { RequestInfo } from "node-fetch";
 import { JSDOM } from "jsdom";
+import { pathToFileURL } from "url";
 
 const getRJNumber = async (title: string): Promise<string | null> => {
   const baseUrl: RequestInfo = "https://www.google.com/search?q=";
@@ -32,7 +34,7 @@ const getRJNumber = async (title: string): Promise<string | null> => {
 const getTargetTitles = (dir: fs.PathLike): string[] => {
   const folderNames: string[] = fs.readdirSync(dir);
   const TargetTitles = folderNames.filter(
-    (name) => !name.match(/^RJ[0-9]{6}_/)
+    (name) => fs.statSync(name).isDirectory() && !name.match(/^RJ[0-9]{6}_/)
   );
 
   return TargetTitles;
@@ -65,15 +67,13 @@ const renameFolders = async (dir: fs.PathLike): Promise<void> => {
 const main = (): void => {
   const arg = process.argv[2];
   if (arg && fs.statSync(arg)) {
-    renameFolders(arg);
+    if (path.resolve(arg) === path.resolve(__dirname))
+      console.log("CAN'T specify directory has this exe file"); // FIXME
+
+    renameFolders(path.resolve(arg));
   } else {
-    console.log(
-      "usage:",
-      process.argv[0],
-      process.argv[1],
-      "arg_target_directory"
-    );
-    console.log("'.' to specify current directory");
+    console.log("usage:", process.argv[0], "arg_target_directory");
+    console.log("CAN'T specify directory has this exe file");
   }
 };
 
