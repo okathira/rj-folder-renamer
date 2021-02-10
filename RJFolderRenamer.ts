@@ -32,7 +32,7 @@ const getRJNumber = async (title: string): Promise<string | null> => {
 const getTargetTitles = (dir: fs.PathLike): string[] => {
   const folderNames: string[] = fs.readdirSync(dir);
   const TargetTitles = folderNames.filter(
-    (name) => !name.match(/^RJ[0-9]{6}_/)
+    (name) => fs.statSync(name).isDirectory() && !name.match(/^RJ[0-9]{6}_/)
   );
 
   return TargetTitles;
